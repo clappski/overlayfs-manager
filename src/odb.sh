@@ -76,6 +76,8 @@ new() {
 		echo "ln -s $lower $root/lower"
 	fi
 
+	ln -s "$merged" "$root/merged"
+
 	if verbose; then
 		echo "sudo mount -t overlay overlay -o lowerdir=$lower,upperdir=$upper,workdir=$work $merged"
 	fi
@@ -126,8 +128,19 @@ del() {
 }
 
 info () {
-	for entry in "$BASEDIR"/*; do
-		ls $entry
+	for entry in $(ls "$BASEDIR"); do
+		echo $entry
+		merged=$(realpath "$BASEDIR/$entry/merged")
+		lower=$(realpath "$BASEDIR/$entry/lower")
+
+		echo "	@: $(stat "$BASEDIR"/"$entry"/upper -c"%w")"
+		echo "	M: $merged"
+		echo "	L: $lower"
+
+		if verbose; then
+			echo "	U: $BASEDIR/$entry/upper"
+			echo "	W: $BASEDIR/$entry/work"
+		fi
 	done
 }
 
