@@ -2,7 +2,6 @@
 
 VERBOSE=false
 BASEDIR="$HOME/.cache/ofs"
-MKDIRS=false
 
 verbose() {
 	[ "$VERBOSE" = "true" ]
