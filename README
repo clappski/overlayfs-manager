@@ -1,0 +1,9 @@
+overlayfs management tool
+	ofs new [lowerdir] [mergeddir]
+	ofs rm [mergeddir]
+	ofs ls
+FLAGS:
+	-v|--verbose	Verbosity
+	-h|--help	Print this help screen
+	-b|--basedir	Override basedir from default (/home/jclapp/.cache/ofs)
+	-p		Create directories if they don't already exist
