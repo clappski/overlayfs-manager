@@ -12,6 +12,7 @@ usage() {
 	echo "	ofs new [lowerdir] [mergeddir]"
 	echo "	ofs rm [mergeddir]"
 	echo "	ofs ls"
+	echo "	ofs restore"
 }
 
 help() {
@@ -20,7 +21,6 @@ help() {
 	echo "	-v|--verbose	Verbosity"
 	echo "	-h|--help	Print this help screen"
 	echo "	-b|--basedir	Override basedir from default ($BASEDIR)"
-	echo "	-p		Create directories if they don't already exist"
 }
 
 new() {
@@ -143,6 +143,16 @@ info () {
 	done
 }
 
+restore () {
+	for fs in "$BASEDIR"/*; do
+		if ! mount | grep "$fs"; then
+			sudo mount -t overlay overlay -o lowerdir=$(realpath "$fs"/lower),upperdir=$(realpath "$fs"/upper),workdir=$(realpath "$fs"/work) $(realpath "$fs"/merged)
+			verbose && echo "sudo mount -t overlay overlay -o lowerdir=$(realpath $fs/lower),upperdir=$(realpath $fs/upper),workdir=$(realpath $fs/work) $(realpath $fs/merged)"
+		fi
+
+	done
+}
+
 if [ $# -lt 1 ]; then
 	usage
 	exit 1
@@ -162,10 +172,6 @@ while (( "$#" )); do
 		-h|--help)
 			help
 			exit 0
-			;;
-		-p)
-			MKDIRS=true
-			shift
 			;;
 		*)
 			PARAMS="$PARAMS $1"
@@ -196,6 +202,10 @@ case "$1" in
 	ls)
 		shift
 		info "$@"
+		;;
+	restore)
+		shift
+		restore "$@"
 		;;
 	*)
 		usage
