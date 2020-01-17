@@ -9,10 +9,10 @@ verbose() {
 
 usage() {
 	echo "overlayfs management tool"
-	echo "	ofs new [lowerdir] [mergeddir]"
-	echo "	ofs rm [mergeddir]"
-	echo "	ofs ls"
-	echo "	ofs restore"
+	echo "	$0 new [lowerdir] [mergeddir]"
+	echo "	$0 rm [mergeddir]"
+	echo "	$0 ls"
+	echo "	$0 restore"
 }
 
 help() {
@@ -149,7 +149,6 @@ restore () {
 			sudo mount -t overlay overlay -o lowerdir=$(realpath "$fs"/lower),upperdir=$(realpath "$fs"/upper),workdir=$(realpath "$fs"/work) $(realpath "$fs"/merged)
 			verbose && echo "sudo mount -t overlay overlay -o lowerdir=$(realpath $fs/lower),upperdir=$(realpath $fs/upper),workdir=$(realpath $fs/work) $(realpath $fs/merged)"
 		fi
-
 	done
 }
 
@@ -211,4 +210,6 @@ case "$1" in
 		usage
 		exit 1
 esac
+
+exit 0
 
